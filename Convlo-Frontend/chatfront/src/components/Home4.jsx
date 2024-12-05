@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatList from "../component/ChatList";
-import ChatContent from "../component/ChatContent";
+import ChatContent from "../component/ChatContent1";
 import Profile from "./Profile";
 import { fetchTodos, getTodo, postTodo, putTodo, deleteTodo } from '../service/home';
 import { useNavigate } from "react-router-dom";

@@ -7,16 +7,11 @@
  * DELETE "http://localhost:8080/todolist/{id}" 刪除待辦事項
  * ------------------------------------------------------------
  * */
-const BASE_URL = 'http://localhost:8089/home';
+const BASE_URL = 'http://localhost:8089/Register';
 
 // 獲取所有待辦事項
 export const fetchTodos = async() => {
-    const token = localStorage.getItem('jwtToken');
-    const response = await fetch(BASE_URL,{
-        headers: {
-        'Authorization': `Bearer ${token}`  // 在標頭中加上 JWT
-        }
-    });
+    const response = await fetch(BASE_URL);
     const result = await response.json();
     if (result.status === 200) {
         return result.data; // 返回資料
@@ -24,30 +19,12 @@ export const fetchTodos = async() => {
     throw new Error(result.message);
 };
 
-// 獲取待辦事項
-export const getTodo = async() => {
-    const token = localStorage.getItem('jwtToken');
-    const response = await fetch(BASE_URL, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    });
-    const result = await response.json();
-    if (result.status === 200) {
-        return result.data; // 返回資料 json 給 then(json) 接收
-    }
-    throw new Error(result.message);
-};
-
 // 資料送後台待辦事項
 export const postTodo = async(todo) => {
-    const token = localStorage.getItem('jwtToken');
     const response = await fetch(BASE_URL, {
         method: 'POST',
         headers: {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Content-type': 'application/json'
         },
         body: JSON.stringify(todo),
     });
@@ -60,12 +37,10 @@ export const postTodo = async(todo) => {
 
 // 更新待辦事項
 export const putTodo = async(updateTodo) => {
-    const token = localStorage.getItem('jwtToken');
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(`${BASE_URL}/${updateTodo.id}`, {
         method: 'PUT',
         headers: {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Content-type': 'application/json'
         },
         body: JSON.stringify(updateTodo),
     });
@@ -78,13 +53,8 @@ export const putTodo = async(updateTodo) => {
 
 // 刪除待辦事項
 export const deleteTodo = async(id) => {
-    const token = localStorage.getItem('jwtToken');
     const response = await fetch(`${BASE_URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
     });
     const result = await response.json();
     if (result.status === 200) {
@@ -92,4 +62,3 @@ export const deleteTodo = async(id) => {
     }
     throw new Error(result.message);
 };
-

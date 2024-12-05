@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar2';
 import Login from './components/Login2';
-import Home from './components/Home4';
+import Home from './components/Home4.jsx';
 import Register from './components/Register';
 import './App.css';
 
@@ -19,6 +19,8 @@ function App() {
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
             <Route path="/home" element={<Home />} />
+            {/* <Route path="/home/profile" element={<Profile />} />
+            <Route path="/ChatContent1" element={<ChatContent1 />} /> */}
           </Routes>
         </div>
       </div>

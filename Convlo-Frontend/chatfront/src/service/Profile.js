@@ -7,7 +7,7 @@
  * DELETE "http://localhost:8080/todolist/{id}" 刪除待辦事項
  * ------------------------------------------------------------
  * */
-const BASE_URL = 'http://localhost:8089/home';
+const BASE_URL = 'http://localhost:8089/home/profile';
 
 // 獲取所有待辦事項
 export const fetchTodos = async() => {
