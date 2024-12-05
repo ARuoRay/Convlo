@@ -1,0 +1,90 @@
+#root {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+  
+}
+
+.content-container {
+  display: flex;
+  justify-content: flex-end; /* 預設在右側顯示 */
+}
+
+@media (max-width: 800px) {
+  .content-container {
+    justify-content: center; /* 居中顯示 */
+  }
+}
+
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+.login-container {
+  margin-top: 20px;
+}
+
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #aac6e7; /* 背景色：淺藍色 */
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* 登入區域靠右對齊 */
+  align-items: center;
+  padding-right: 50px; /* 向右側的填充距離 */
+  margin-top: 80px; /* 避免與 Navbar 重疊 */
+  height: calc(100vh - 80px); /* 設定高度以確保登入框垂直居中 */
+  background-color: transparent; /* 移除灰色背景，設為透明 */
+}
+
+.login-area {
+  background-color: #d3d3d3; /* 登入框背景顏色 */
+  padding: 40px;
+  border-radius: 10px;
+  width: 300px; /* 調整寬度，使其與設計圖相符 */
+}
+
+

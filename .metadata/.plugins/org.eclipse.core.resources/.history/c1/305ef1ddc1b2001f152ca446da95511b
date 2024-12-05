@@ -1,0 +1,160 @@
+package chat.service;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import chat.config.SpringConfigurator;
+import chat.model.dto.MessageDto;
+import chat.util.JwtUtil;
+import jakarta.websocket.EndpointConfig;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
+
+@ServerEndpoint(value = "/home/{roomId}", configurator = SpringConfigurator.class)
+@Component
+public class WebSocketServer {
+	// 用來儲存聊天室的 WebSocket 連接，key 爲 roomId，value 爲該聊天室的連接列表
+	private static ConcurrentHashMap<String, Set<Session>> roomSessions = new ConcurrentHashMap<>();
+	
+	@Autowired
+	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private MessageService messageService;
+	
+	private Session session;
+	private String userId;
+	private String roomId;
+
+	@OnOpen
+	public void onOpen(Session session, EndpointConfig config, @PathParam("roomId") String roomId) {
+		System.out.println("Connection opened: " + session.getId());
+		this.session = session;
+		this.roomId = roomId; // 使用 URL 中的 roomId
+		
+		String token=getTokenFromSession(session);
+		System.out.println("Request parameters: " + session.getRequestParameterMap());
+		this.userId = getUserId(token); // 使用 token 取得 userId
+
+		if (this.userId == null) {
+            sendMessage("無效的 token，無法連接到聊天室。");
+            try {
+                session.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+		
+		// 將用戶的 session 添加到對應聊天室的連接池中
+		roomSessions.computeIfAbsent(roomId, k -> new HashSet<>()).add(session);
+
+		// 向客戶端發送連接成功的訊息
+		sendMessage("成功連接到聊天室：" + roomId+ " 用戶名：" + this.userId);
+	}
+
+	@OnMessage
+	public void onMessage(String message, Session session) {
+
+		try {
+			 // 使用 ObjectMapper 解析接收到的 JSON 訊息
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
+	        
+	        System.out.println(messageDto.toString());
+	        messageService.addMessage(messageDto);
+
+	        // 取得 roomId 和 messageDto 內容
+	        String roomId = messageDto.getReceiveChat();  // 使用 MessageDto 中的 receiveChat 屬性作爲房間ID
+	        String content = messageDto.getMessage();     // 使用 MessageDto 中的 message 屬性作爲訊息內容
+	        String sendUser = messageDto.getSendUser();   // 使用 MessageDto 中的 sendUser 屬性
+
+	        // 包裝包含用戶 ID 的訊息
+	        String userMessage =sendUser + ": " + content;
+	        System.out.println("房間：" + roomId + " 訊息：" + userMessage);
+	        
+	        // 發送訊息給當前聊天室的所有成員
+	        sendMessageToRoom(roomId, userMessage);
+		} catch (JsonProcessingException e) {
+	        // 捕捉 JSON 處理過程中的錯誤（如格式錯誤、無法映射等）
+	        e.printStackTrace();
+	        sendMessage("訊息解析錯誤：無效的 JSON 格式");
+	    } catch (Exception e) {
+	        // 捕捉其他可能發生的異常
+	        e.printStackTrace();
+	        sendMessage("訊息處理出現未知錯誤");
+	    }
+	}
+
+	@OnClose
+	public void onClose() {
+		// 移除聊天室中的 session
+		if (roomSessions.containsKey(roomId)) {
+			roomSessions.get(roomId).remove(session);
+			if (roomSessions.get(roomId).isEmpty()) {
+				roomSessions.remove(roomId);
+			}
+		}
+	}
+
+	@OnError
+	public void onError(Session session, Throwable error) {
+		// 處理錯誤
+		error.printStackTrace();
+	}
+
+	private void sendMessage(String message) {
+		try {
+			session.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void sendMessageToRoom(String roomId, String message) {
+		if (roomSessions.containsKey(roomId)) {
+			for (Session s : roomSessions.get(roomId)) {
+				 // 非同步發送訊息
+	            CompletableFuture.runAsync(() -> {
+	                try {
+	                    s.getBasicRemote().sendText(message);
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            });
+			}
+		}
+	}
+	
+	// 從 token 取得 userId
+    private String getUserId(String token) {
+//    	System.out.println(jwtUtil.parseToken(token));
+    	if (token != null && JwtUtil.validateToken(token)) {
+            System.out.println("Token 驗證成功，userId: " + JwtUtil.getUsernameFromToken(token));
+            return jwtUtil.getUsernameFromToken(token);
+        }
+        System.out.println("Token 驗證失敗或為空");
+        return null;
+    }
+
+ // 從 Session 中取得 Token
+    private String getTokenFromSession(Session session) {
+        String token = session.getRequestParameterMap().get("token") != null
+                ? session.getRequestParameterMap().get("token").get(0) : "";
+        return token;
+    }
+}
