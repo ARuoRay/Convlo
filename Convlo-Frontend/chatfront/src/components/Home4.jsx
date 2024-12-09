@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import ChatList from "../component/ChatList";
+import ChatList from "../component/ChatList1";
 import ChatContent from "../component/ChatContent1";
 import Profile from "./Profile";
+import { fetchAllChats } from "../service/ChatList";
 import { fetchTodos, getTodo, postTodo, putTodo, deleteTodo } from '../service/home';
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +10,8 @@ function Home() {
   const [token, setToken] = useState(localStorage.getItem('jwtToken'));
   const navigate = useNavigate();
   const [user, setUser] = useState();
+  const [chats, setChats] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
 
   const [UserData, setUserData] = useState({
     username: "",
@@ -18,24 +21,6 @@ function Home() {
     gender: ""
   });
 
-  const [chats, setChats] = useState([
-    {
-      id: 1,
-      creator: {
-        username: "user1"
-      },
-      chatname: "Chat Room 1",
-    },
-    {
-      id: 2,
-      creator: {
-        username: "user2"
-      },
-      chatname: "Chat Room 2",
-    },
-  ]);
-
-  const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState({
     1: [
       { sender: "user1", content: "Hello from Chat Room 1!" },
@@ -53,11 +38,33 @@ function Home() {
     }
   }, [token]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('jwtToken');
-    setToken(null);
-    navigate('/login');
+
+  //得到聊天室列表
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const loadChats = async () => {
+      try {
+        const fetchedChats = await fetchAllChats();
+        setChats(fetchedChats);
+      } catch (error) {
+        console.error("Failed to load chats:", error);
+      }
+    };
+
+    loadChats();
+  }, [token, navigate]);
+
+  const handleChatClick = (chatId) => {
+    setSelectedChat(chatId);
+    console.log("Selected Chat ID:", chatId);
   };
+
+
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -69,11 +76,7 @@ function Home() {
     setIsModalOpen(false);
   };
 
-  const handleChatClick = (chatId) => {
-    // 處理點擊聊天室的操作，在同一個頁面中更新聊天內容
-    setSelectedChat(chatId);
-    console.log("Selected Chat ID:", chatId);
-  };
+
 
   const handleAddChat = () => {
     // 添加一個新的聊天室

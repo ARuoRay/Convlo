@@ -5,16 +5,6 @@
   
 }
 
-.content-container {
-  display: flex;
-  justify-content: flex-end; /* 預設在右側顯示 */
-}
-
-@media (max-width: 800px) {
-  .content-container {
-    justify-content: center; /* 居中顯示 */
-  }
-}
 
 
 .logo {
@@ -58,15 +48,21 @@
   margin-top: 20px;
 }
 
-
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* 填滿視窗高度 */
+}
 
 body, html {
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 10px;
   height: 100%;
+  overflow: hidden;
   font-family: Arial, sans-serif;
   background-color: #aac6e7; /* 背景色：淺藍色 */
 }
+
 
 .main-content {
   flex: 1;
