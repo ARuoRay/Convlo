@@ -10,20 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatDto {
-	
+
 	private long chatId;
 	private String chatname;
 	private LocalDateTime createAt;
 	private UserDto creator;
-	
-	
+
 	@Override
 	public String toString() {
-		return "ChatDto [chatname=" + chatname + ", createAt=" + createAt + ", creator=" + creator + "]";
-	}
-	
-	public ChatDto(String chatname) {
-		super();
-		this.chatname = chatname;
+		return "ChatDto [chatId=" + chatId + ", chatname=" + chatname + ", createAt=" + createAt + ", creator="
+				+ creator + "]";
 	}
 }
