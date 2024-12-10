@@ -35,9 +35,9 @@ class WebSocket {
         console.log("WebSocket 錯誤: ", error);
     };
 
-    connect(roomId) {
+    connect(chatId) {
         if (this.socket.readyState === window.WebSocket.OPEN) {
-            console.log(`已連接到 ${roomId}`);
+            console.log(`已連接到 ${chatId}`);
         } else {
             console.log("WebSocket 尚未開啟");
         }

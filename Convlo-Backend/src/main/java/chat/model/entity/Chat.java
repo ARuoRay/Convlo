@@ -56,7 +56,6 @@ public class Chat {
 	    joinColumns = @JoinColumn(name = "chats_chat_id"), // Chat 表的主鍵列
 	    inverseJoinColumns = @JoinColumn(name = "users_user_id") // User 表的主鍵列
 	)
-	@JsonIgnore
 	private List<User> users= new ArrayList<>();
 
 	@PrePersist

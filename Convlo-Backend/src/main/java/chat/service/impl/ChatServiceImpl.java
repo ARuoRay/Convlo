@@ -117,6 +117,8 @@ public class ChatServiceImpl implements ChatService {
 	    List<Chat> chats = chatRepository.findAllByUsersContaining(user);
 	    
 		// 將每個 Chat 實體轉換為 ChatroomDto
+	    
+	    
 	    return chats.stream()
 	            .map(chat -> modelMapper.map(chat, ChatDto.class)) // 使用 ModelMapper 轉換
 	            .toList();
@@ -210,6 +212,9 @@ public class ChatServiceImpl implements ChatService {
 
 	    // 設置到 ChatroomDto 的 users 字段
 	    chatroomDto.setUsers(userDtos);
+	    
+	    //設置ChatId
+	    chatroomDto.setChatId(chat.getChatId());
 
 	    return chatroomDto;
 	}

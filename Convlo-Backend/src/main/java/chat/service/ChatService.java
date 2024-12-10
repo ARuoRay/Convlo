@@ -26,6 +26,8 @@ public interface ChatService {
 	//查詢聊天訊息
 	//List<Message>getMessagesByChatId(Long chatId);
 	
+	//用ChatId
+	
 	//刪除聊天室
 	ChatroomDto leaveChat(Long chatId, String username);
 	

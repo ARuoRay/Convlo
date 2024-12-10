@@ -95,7 +95,9 @@ export const deleteChat = async (chatId) => {
 
 // **6. （可選）獲取聊天室的所有消息**
 export const fetchMessages = async (chatId) => {
-  const response = await fetch(`${BASE_URL}/${chatId}/messages`, {
+  const token = localStorage.getItem('jwtToken');
+
+  const response = await fetch(`${BASE_URL}/${chatId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
