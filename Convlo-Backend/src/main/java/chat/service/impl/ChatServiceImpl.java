@@ -19,11 +19,9 @@ import chat.model.dto.ChatDto;
 import chat.model.dto.ChatroomDto;
 import chat.model.dto.UserDto;
 import chat.model.entity.Chat;
-import chat.model.entity.ChatUser;
 import chat.model.entity.Message;
 import chat.model.entity.User;
 import chat.repository.ChatRepository;
-import chat.repository.ChatUserRepository;
 import chat.repository.MessageRepository;
 import chat.repository.UserRepository;
 import chat.service.ChatService;
@@ -37,8 +35,7 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
 	private ChatRepository chatRepository;
 	
-	@Autowired
-	private ChatUserRepository chatUserRepository;
+
 	
 	@Autowired
 	private MessageRepository messageRepository;
@@ -183,10 +180,6 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 
-//	@Override
-//	public List<Message> getMessagesByChatId(Long chatId) {
-//
-//	}
 
 	@Override
 	public void deleteChat(Long chatId) {
@@ -198,7 +191,12 @@ public class ChatServiceImpl implements ChatService {
 	    chatRepository.delete(chat);
 	}
 
-  
+	@Override
+	public ChatDto getChat(String chatId) {
+		Chat chat = chatRepository.findById(Long.parseLong(chatId)).get();
+		ChatDto chatDto = modelMapper.map(chat, ChatDto.class);
+		return chatDto;
+	}
 	
 	//服務層轉換Entity to Dto
 	private ChatroomDto convertToDto(Chat chat) {

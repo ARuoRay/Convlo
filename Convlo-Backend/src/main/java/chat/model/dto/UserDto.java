@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDto {
 	private String username;
-	private String nickName;
+	private String nickname;
 	private String gender;
-	
+
 	@Override
 	public String toString() {
-		return "UserDto [username=" + username + ", nickName=" + nickName + ", gender=" + gender + "]";
+		return "UserDto [username=" + username + ", nickName=" + nickname + ", gender=" + gender + "]";
 	}
-	
-	
+
 }

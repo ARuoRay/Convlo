@@ -162,6 +162,17 @@ public class ChatController {
 	}
     
     
+    //取得user資料
+    @GetMapping
+	public ResponseEntity<ApiResponse<UserDto>> getProfile(@AuthenticationPrincipal String username) {
+		return ResponseEntity.ok(ApiResponse.success("查詢成功", userService.findByUser(username)));
+	}
+    
+    @GetMapping("/{roomId}/profile")
+	public ResponseEntity<ApiResponse<ChatDto>> getChat(@PathVariable String roomId) {
+		return ResponseEntity.ok(ApiResponse.success("查詢成功", chatService.getChat(roomId)));
+	}
+    
     
     // **6. 刪除聊天室（僅內部調用）**
     // 注意：此方法應該標記為內部使用，外部客戶端不應直接調用
