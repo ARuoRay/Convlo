@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatList from "../component/ChatList2";
-import ChatContent from "../component/ChatContent2";
+import ChatContent from "../component/ChatContent3";
 import Profile from "./Profile";
 import AddChat from "../component/AddChat";
 import { fetchAllChats,fetchMessages } from "../service/ChatList";
