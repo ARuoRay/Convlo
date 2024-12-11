@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +16,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,8 +62,9 @@ public class User {
 	@OneToMany(mappedBy = "sendUser", cascade = CascadeType.ALL)
 	private List<Message> messages;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<ChatUser> chatUsers;
+	@ManyToMany(mappedBy = "users") // 由 Chat 實體管理關聯
+	@JsonIgnore
+	private List<Chat> chats;
 
 	// 在新增記錄時自動設定時間
 	@PrePersist

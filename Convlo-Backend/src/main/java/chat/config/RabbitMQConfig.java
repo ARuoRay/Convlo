@@ -1,4 +1,4 @@
-package chat.config;
+  package chat.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

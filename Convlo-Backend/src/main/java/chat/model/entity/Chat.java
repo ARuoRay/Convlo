@@ -12,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -45,8 +47,13 @@ public class Chat {
 	@OneToMany(mappedBy = "receiveChat", cascade = CascadeType.ALL)
 	private List<Message> messages;
 
-	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
-	private List<ChatUser> chatUsers;
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // 級聯保存與更新
+	@JoinTable(
+	    name = "chat_users", // 關聯表名稱
+	    joinColumns = @JoinColumn(name = "chats_chat_id"), // Chat 表的主鍵列
+	    inverseJoinColumns = @JoinColumn(name = "users_user_id") // User 表的主鍵列
+	)
+	private List<User> users;
 
 	@PrePersist
 	public void prePersist() {

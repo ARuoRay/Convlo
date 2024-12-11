@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+/*@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +27,4 @@ public class ChatUser {
 	@ManyToOne
 	@JoinColumn(name = "chat_id")
 	private Chat chat; // 聊天室
-}
+}*/

@@ -21,7 +21,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/home/{roomId}", configurator = SpringConfigurator.class)
+/*@ServerEndpoint(value = "/home/{roomId}", configurator = SpringConfigurator.class)
 @Component
 public class WebSocketServer {
 
@@ -31,20 +31,35 @@ public class WebSocketServer {
 	// 用來統一管理所有連接的 session
 	private static final ConcurrentHashMap<String, ConcurrentHashMap<String, Session>> roomSessions = new ConcurrentHashMap<>();
 	private Session session;
-	private String username;
-	private String roomId;
 
 	@OnOpen
-	public void onOpen(Session session, @PathParam("roomId") String roomId) throws IOException {
+	public synchronized void onOpen(Session session, @PathParam("roomId") String roomId) throws IOException {
 		String token = session.getRequestParameterMap().get("token").get(0);
-		this.username = JwtUtil.getUsernameFromToken(token);
-		this.roomId = roomId;
+		String username = JwtUtil.getUsernameFromToken(token);
 		this.session = session;
-
+		session.getPathParameters().put("roomId", roomId);
+		session.getPathParameters().put("username", username);
+		
+		//再連接前，先確認session有沒有在線，在線就移除掉session，在做重新連線
+		roomSessions.compute(roomId,(room,sessions)->{
+			if(sessions==null) {
+				sessions=new ConcurrentHashMap<>();
+			}
+			sessions.remove(username);
+			return sessions;
+		});
+		
 		// 確保房間存在，並添加用戶 Session
-		roomSessions.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(username, session);
+		roomSessions.compute(roomId,(room,sessions)->{//使用 `compute` 來確保操作原子性
+			if(sessions==null) {
+				sessions=new ConcurrentHashMap<>();
+			}
+			sessions.put(username, session);
+			return sessions;
+		});
+		
 		System.out.println(username + "加入到房間" + roomId);
-		System.out.println("目前聊天室 " + roomId + " 中有 " + roomSessions.get(this.roomId).size() + " 人");
+		System.out.println("目前聊天室 " + roomId + " 中有 " + roomSessions.get(roomId).size() + " 人");
 	}
 
 	@OnMessage
@@ -55,19 +70,25 @@ public class WebSocketServer {
 
 	@OnClose
 	public void onClose() {
-		// 當連接關閉時，從 roomSessions 中移除該 session
-		roomSessions.get(this.roomId).values().removeIf(s -> s.equals(this.session));
-		System.out.println("連接關閉: " + username);
-		System.out.println("目前聊天室 " + roomId + " 中剩餘 " + roomSessions.get(this.roomId).size() + " 人");
+//		// 當連接關閉時，從 roomSessions 中移除該 session
+//		roomSessions.computeIfPresent(roomId, (room,sessions)->{//使用 `compute` 保證原子性
+//			System.out.println(sessions);
+//			sessions.remove(username);
+//			System.out.println("連接關閉: " + username);
+//			System.out.println(sessions);
+//			System.out.println("目前聊天室 " + roomId + " 中剩餘 " + sessions.size() + " 人");
+//			System.out.println(sessions);
+//			return sessions.isEmpty()?null:sessions;// 如果該房間沒有成員，則移除該房間
+//		});
 	}
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		// 處理錯誤
-		roomSessions.get(this.roomId).values().removeIf(s -> s.equals(this.session));
+
 	}
 
 	public void SendMessage(String message) {
+		String roomId=session.getPathParameters().get("roomId");
 		if (roomSessions.containsKey(roomId)) {
 			for (Session s : roomSessions.get(roomId).values()) {
 				// 非同步發送訊息
@@ -83,4 +104,4 @@ public class WebSocketServer {
 
 	}
 
-}
+}*/
