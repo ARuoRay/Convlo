@@ -33,7 +33,7 @@ function Login() {
         //將資料丟後端去做比對
         try {
             const response = await postTodo(user);
-            console.log(response);
+            //console.log(response);
             localStorage.setItem('jwtToken', response);
             navigate('/home');
 

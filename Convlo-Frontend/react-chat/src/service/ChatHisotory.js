@@ -7,10 +7,25 @@
  * DELETE "http://localhost:8080/todolist/{id}" 刪除待辦事項
  * ------------------------------------------------------------
  * */
-const BASE_URL = 'http://localhost:8089/home/profile';
+const BASE_URL = 'http://localhost:8089/chat';
 
-// 獲取待辦事項
-export const getTodo = async () => {
+// 獲取聊天紀錄
+export const getAllTodos = async(roomId) => {
+    const token = localStorage.getItem('jwtToken');
+    const response = await fetch(`${BASE_URL}/${roomId}`,{
+        headers: {
+            'Authorization': `Bearer ${token}`  // 在標頭中加上 JWT
+        }
+    });
+     const result = await response.json();
+    if (result.status === 200) {
+        return result.data; // 返回資料
+    }
+    throw new Error(result.message);
+};
+
+// 獲取個人資料
+export const getProfileTodo = async() => {
     const token = localStorage.getItem('jwtToken');
     const response = await fetch(BASE_URL, {
         method: 'GET',
@@ -25,38 +40,20 @@ export const getTodo = async () => {
     throw new Error(result.message);
 };
 
-
-// 更新待辦事項
-export const putTodo = async (updateTodo) => {
+// 獲取房間所有訊息
+export const getChatTodo = async(roomId) => {
     const token = localStorage.getItem('jwtToken');
-    const response = await fetch(BASE_URL, {
-        method: 'PUT',
+    const response = await fetch(`${BASE_URL}/${roomId}/profile`, {
+        method: 'GET',
         headers: {
-            'Content-type': 'application/json',
             'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(updateTodo),
     });
     const result = await response.json();
     if (result.status === 200) {
-        return result.data; // 返回資料
+        return result.data; // 返回資料 json 給 then(json) 接收
     }
     throw new Error(result.message);
 };
 
-export const putImage = async (FormData) => {
-    const token = localStorage.getItem('jwtToken');
-    const response = await fetch('http://localhost:8089/file/ImageUpload', {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-        body: FormData,
-    });
-    const result=await response.json();
-    if(result.status===200){
-        return result.data; // 返回資料
-    }
-    throw new Error(result.message);
-}
 
