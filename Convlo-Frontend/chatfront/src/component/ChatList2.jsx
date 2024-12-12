@@ -9,8 +9,6 @@ function ChatList({ chats, onChatClick }) {
           key={chat.chatId}
           className="flex items-center p-4 rounded-lg cursor-pointer transition-all duration-300 bg-white shadow-md hover:bg-blue-50"
           onClick={() => {
-            console.log(`Clicked chatID: ${chat.chatId}`); // 確認 chatID
-            console.log(`Clicked chatID: ${chat.chatname}`); // 確認 chatID
 
             onChatClick(chat.chatId);
           }}

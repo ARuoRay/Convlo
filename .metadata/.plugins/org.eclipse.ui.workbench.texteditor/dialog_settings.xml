@@ -3,6 +3,8 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="SendMess"/>
+		<item value="send"/>
 		<item value="roomId"/>
 		<item value="add"/>
 		<item value="spring-boot-starter-web"/>

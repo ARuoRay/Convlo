@@ -1,3 +1,5 @@
+import { getTodo } from "./home";
+
 /**
  * WEB API TodoList Rest CRUD
  * ------------------------------------------------------------
@@ -11,6 +13,8 @@ const BASE_URL = 'http://localhost:8089/home/chat';
 
 // 獲取聊天紀錄
 export const getAllTodos = async(chatId) => {
+    console.log("獲取房間的chatId:"+chatId);
+
     const token = localStorage.getItem('jwtToken');
     const response = await fetch(`${BASE_URL}/${chatId}`,{
         headers: {
@@ -42,6 +46,7 @@ export const getProfileTodo = async() => {
 
 // 獲取房間所有訊息
 export const getChatTodo = async(chatId) => {
+    console.log("獲取房間的chatId:"+chatId);
     const token = localStorage.getItem('jwtToken');
     const response = await fetch(`${BASE_URL}/${chatId}/profile`, {
         method: 'GET',
