@@ -17,12 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/home/chat")
 public class ChatController {
 
 	@Autowired
@@ -48,6 +49,12 @@ public class ChatController {
 	@GetMapping("/{roomId}/profile")
 	public ResponseEntity<ApiResponse<ChatDto>> getChat(@PathVariable String roomId) {
 		return ResponseEntity.ok(ApiResponse.success("查詢成功", chatService.getChat(roomId)));
+	}
+	
+	@DeleteMapping("/{roomId}")
+	public ResponseEntity<ApiResponse<ChatDto>> deleteChat(@PathVariable String roomId){
+		chatService.deleteChat(roomId);
+		return ResponseEntity.ok(ApiResponse.success("刪除成功", null));
 	}
 
 	// 處理異常狀況

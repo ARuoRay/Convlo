@@ -22,7 +22,7 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/home", configurator = SpringConfigurator.class)
+//@ServerEndpoint(value = "/home", configurator = SpringConfigurator.class)
 @Component
 public class WebSocketServer2 {
 
@@ -37,12 +37,12 @@ public class WebSocketServer2 {
 	// 儲存每個用戶ID與對應的WebSocket session
 	private ConcurrentHashMap<String, Session> userSession = new ConcurrentHashMap<>();
 
-	private String username;
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		String token = session.getRequestParameterMap().get("token").get(0);
-		this.username = JwtUtil.getUsernameFromToken(token);
+		String username = JwtUtil.getUsernameFromToken(token);
+		session.getPathParameters().put("username", username);
 
 		// 記錄該用戶的 WebSocket 連接
 		userSession.put(username, session);
@@ -65,13 +65,16 @@ public class WebSocketServer2 {
 	}
 
 	@OnClose
-	public void onClose() {
-		System.out.println(username+"已斷開連線");
+	public void onClose(Session session) {
+		String username=session.getPathParameters().get("username");
+		userSession.remove(username);
+		chatRoom.remove(session, username)
+		System.out.println("用戶"+username+"關閉連線");
 	}
 
 	@OnError
-	public void onError() {
-		System.err.println(username+"已斷開連線");
+	public void onError(Session session,Throwable throwable) {
+		String username=session.getPathParameters().get("username");
 	}
 
 	public void SendMessage(String roomId, String message) {

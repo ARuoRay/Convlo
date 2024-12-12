@@ -50,6 +50,12 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	public void deleteChat(String roomId) {
+		chatRepository.findById(Long.parseLong(roomId)).orElseThrow(()->new RuntimeException("此聊天室不存在，刪除失敗!"));
+		chatRepository.deleteById(Long.parseLong(roomId));
+	}
+
+	@Override
 	public List<ChatDto> findAllChatByUser(String username) {
 	    // 查詢用戶
 	    User user = userRepository.findByUsername(username)

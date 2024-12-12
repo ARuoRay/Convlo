@@ -10,6 +10,9 @@ public interface ChatService {
 	//創建聊天室
 	void createChat(ChatDto chatDto);
 	
+	//刪除聊天室
+	void deleteChat(String roomId);
+	
 	//查詢個人所有聊天室
 	List<ChatDto>findAllChatByUser(String username);
 	
