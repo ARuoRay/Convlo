@@ -26,7 +26,7 @@ public class RabbitMQbroker {
 	@Autowired
 	private MessageService messageService;
 
-	@RabbitListener(queues = "SendMessageQueue")
+	@RabbitListener(queues = "SendMessageToOnlineUsersQueue")
 	public void receiveMessageFromRabbitMQ(String message) throws JsonMappingException, JsonProcessingException {
 		MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
 		// System.out.println(messageDto.toString());

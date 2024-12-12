@@ -66,7 +66,7 @@ public class WebSocketServer2 {
 	@OnMessage
 	public void onMessage(String message, Session session) throws JsonMappingException, JsonProcessingException {
 		// 使用 RabbitMqSender 發送消息
-		rabbitMqSender.sendMessageToRabbitMq(message);
+		rabbitMqSender.sendMessageToOnlineUserToRabbitMq(message);
 	}
 
 	@OnClose

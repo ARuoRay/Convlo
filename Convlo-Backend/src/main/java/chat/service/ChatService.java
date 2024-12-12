@@ -10,7 +10,7 @@ import chat.model.entity.User;
 public interface ChatService {
 
 	//查詢聊天室有哪些成員
-	List<UserDto> findChatByAllUser(String roomId);
+	List<UserDto> findAllUserByChat(String roomId);
 	
 	//創建聊天室
 	void createChat(ChatDto chatDto);

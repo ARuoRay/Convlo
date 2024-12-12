@@ -1,9 +1,11 @@
 package chat.websocket;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import chat.config.SpringConfigurator;
+import chat.service.ChatService;
 import chat.util.JwtUtil;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -27,9 +30,13 @@ public class WebSocketServer {
 
 	@Autowired
 	private SendMessageMQSender rabbitMqSender;
+	
+	@Autowired
+	private ChatService chatService;
 
 	// 用來統一管理所有連接的 session
 	private static final ConcurrentHashMap<String, ConcurrentHashMap<String, Session>> roomSessions = new ConcurrentHashMap<>();
+	private static final Set<String> OnlineUsers = null;
 	private Session session;
 
 	@OnOpen
@@ -58,7 +65,8 @@ public class WebSocketServer {
 			sessions.put(username, session);
 			return sessions;
 		});
-
+		OnlineUsers.add(username);
+		
 		System.out.println(username + "加入到房間" + roomId);
 		System.out.println("目前聊天室 " + roomId + " 中有 " + roomSessions.get(roomId).size() + " 人");
 	}
@@ -66,7 +74,18 @@ public class WebSocketServer {
 	@OnMessage
 	public void onMessage(String message, Session session) throws JsonMappingException, JsonProcessingException {
 		// 使用 RabbitMqSender 發送消息
-		rabbitMqSender.sendMessageToRabbitMq(message);
+		String roomId=(String) session.getUserProperties().get("roomId");
+		Set<String> AllUsers=chatService.findAllUserByChat(roomId).stream()
+						  .map(user->user.getUsername())
+						  .collect(Collectors.toSet());
+		
+		Set<String> offlineUsers = new HashSet<>(AllUsers);
+		offlineUsers.remove(OnlineUsers);
+		if(!offlineUsers.isEmpty()) {
+			rabbitMqSender.sendMessageToOfflineUserToRabbitMq(message);
+			rabbitMqSender.sendOfflineUserToRabbitMq(offlineUsers);
+		}
+		rabbitMqSender.sendMessageToOnlineUserToRabbitMq(message);
 	}
 
 	@OnClose
@@ -74,6 +93,7 @@ public class WebSocketServer {
 		// 當連接關閉時，從 roomSessions 中移除該 session
 		String roomId = (String) session.getUserProperties().get("roomId");
 		String username = (String) session.getUserProperties().get("username");
+		OnlineUsers.remove(username);
 		roomSessions.compute(roomId, (room, sessions) -> {// 使用 `compute` 保證原子性
 			// 初次檢查，避免 sessions 為 null
 			if (sessions == null) {
@@ -93,6 +113,7 @@ public class WebSocketServer {
 		String roomId = (String) session.getUserProperties().get("roomId");
 		String username = (String) session.getUserProperties().get("username");
 
+		OnlineUsers.remove(username);
 		if (session != null && username != null) {
 			roomSessions.compute(roomId, (room, sessions) -> {
 				sessions.remove(username);
