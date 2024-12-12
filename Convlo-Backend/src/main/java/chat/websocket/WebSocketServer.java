@@ -38,8 +38,8 @@ public class WebSocketServer {
 		String username = JwtUtil.getUsernameFromToken(token);
 		this.session = session;
 
-		session.getPathParameters().put("roomId", roomId);
-		session.getPathParameters().put("username", username);
+		session.getUserProperties().put("roomId", roomId);
+		session.getUserProperties().put("username", username);
 
 		// 再連接前，先確認session有沒有在線，在線就移除掉session，在做重新連線
 //		roomSessions.compute(roomId, (room, sessions) -> {
@@ -72,9 +72,15 @@ public class WebSocketServer {
 	@OnClose
 	public void onClose(Session session) {
 		// 當連接關閉時，從 roomSessions 中移除該 session
-		String roomId = session.getPathParameters().get("roomId");
-		String username = session.getPathParameters().get("username");
+		String roomId = (String) session.getUserProperties().get("roomId");
+		String username = (String) session.getUserProperties().get("username");
 		roomSessions.compute(roomId, (room, sessions) -> {// 使用 `compute` 保證原子性
+			// 初次檢查，避免 sessions 為 null
+			if (sessions == null) {
+				System.out.println("房間 " + roomId + " 不存在，無需關閉連接");
+				return null;
+			}
+
 			sessions.remove(username);
 			System.out.println("連接關閉: " + username);
 			System.out.println("目前聊天室 " + roomId + " 中剩餘 " + sessions.size() + " 人");
@@ -84,13 +90,13 @@ public class WebSocketServer {
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		String roomId = session.getPathParameters().get("roomId");
-		String username = session.getPathParameters().get("username");
-		System.err.println("會員 " + username + " 發生錯誤: " + throwable.getMessage());
+		String roomId = (String) session.getUserProperties().get("roomId");
+		String username = (String) session.getUserProperties().get("username");
 
 		if (session != null && username != null) {
 			roomSessions.compute(roomId, (room, sessions) -> {
 				sessions.remove(username);
+				System.err.println("會員 " + username + " 發生錯誤: " + throwable.getMessage());
 				System.err.println("連接關閉: " + username);
 				return sessions;
 			});

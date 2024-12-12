@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import chat.model.dto.ChatDto;
 import chat.model.dto.MessageDto;
 import chat.model.dto.UserDto;
+import chat.model.entity.User;
 import chat.response.ApiResponse;
 import chat.service.ChatService;
 import chat.service.MessageService;

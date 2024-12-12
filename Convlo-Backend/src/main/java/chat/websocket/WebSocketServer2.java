@@ -11,8 +11,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import chat.config.SpringConfigurator;
+import chat.model.dto.ChatDto;
 import chat.service.ChatService;
 import chat.util.JwtUtil;
 import jakarta.websocket.OnClose;
@@ -22,7 +24,7 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 
-//@ServerEndpoint(value = "/home", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/home", configurator = SpringConfigurator.class)
 @Component
 public class WebSocketServer2 {
 
@@ -31,6 +33,9 @@ public class WebSocketServer2 {
 
 	@Autowired
 	private ChatService chatService;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	// 儲存聊天室ID與對應的所有sessionId
 	private ConcurrentHashMap<String, Set<String>> chatRoom = new ConcurrentHashMap<>();
@@ -42,7 +47,7 @@ public class WebSocketServer2 {
 	public void onOpen(Session session) throws IOException {
 		String token = session.getRequestParameterMap().get("token").get(0);
 		String username = JwtUtil.getUsernameFromToken(token);
-		session.getPathParameters().put("username", username);
+		session.getUserProperties().put("username", username);
 
 		// 記錄該用戶的 WebSocket 連接
 		userSession.put(username, session);
@@ -51,10 +56,10 @@ public class WebSocketServer2 {
 		Set<String> chatRooms = chatService.findAllChatByUser(username).stream().map(ChatId -> ChatId.toString())
 				.collect(Collectors.toSet());
 		System.out.println(chatRooms);
-		for (String roomId : chatRooms) {
-			chatRoom.computeIfAbsent(roomId, k -> ConcurrentHashMap.newKeySet()).add(username);
-			System.out.println("用戶 " + username + " 加入聊天室: " + roomId);
-			System.out.println("目前聊天室 " + roomId + " 中有 " + chatRoom.get(roomId).size() + " 人");
+		for (String chat : chatRooms) {
+			chatRoom.computeIfAbsent(chat, k -> ConcurrentHashMap.newKeySet()).add(username);
+			System.out.println("用戶 " + username + " 加入聊天室: " + chat);
+			System.out.println("目前聊天室 " + chat + " 中有 " + chatRoom.get(chat).size() + " 人");
 		}
 	}
 
@@ -66,15 +71,16 @@ public class WebSocketServer2 {
 
 	@OnClose
 	public void onClose(Session session) {
-		String username=session.getPathParameters().get("username");
+		String username=(String)session.getUserProperties().get("username");
 		userSession.remove(username);
-		chatRoom.remove(session, username)
 		System.out.println("用戶"+username+"關閉連線");
 	}
 
 	@OnError
 	public void onError(Session session,Throwable throwable) {
 		String username=session.getPathParameters().get("username");
+		userSession.remove(username);
+		System.err.println("會員 " + username + " 發生錯誤: " + throwable.getMessage());
 	}
 
 	public void SendMessage(String roomId, String message) {

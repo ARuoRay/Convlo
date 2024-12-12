@@ -4,9 +4,14 @@ import java.util.List;
 
 import chat.model.dto.ChatDto;
 import chat.model.dto.ChatroomDto;
+import chat.model.dto.UserDto;
+import chat.model.entity.User;
 
 public interface ChatService {
 
+	//查詢聊天室有哪些成員
+	List<UserDto> findChatByAllUser(String roomId);
+	
 	//創建聊天室
 	void createChat(ChatDto chatDto);
 	

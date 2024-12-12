@@ -31,6 +31,14 @@ public class ChatServiceImpl implements ChatService {
 	private ModelMapper modelMapper;
 
 	@Override
+	public List<UserDto> findChatByAllUser(String roomId) {
+		Chat chat=chatRepository.findById(Long.parseLong(roomId)).get();
+		return userRepository.findAllByChatsContaining(chat).stream()
+				.map(user->modelMapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
 	public void createChat(ChatDto chatDto) {
 		// 查詢創建者
 	    User creator = userRepository.findByUsername(chatDto.getCreator().getUsername())

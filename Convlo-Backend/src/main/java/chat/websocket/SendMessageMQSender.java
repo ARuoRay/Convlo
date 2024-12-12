@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import chat.model.dto.MessageDto;
 
 
 @Service
@@ -14,11 +17,14 @@ public class SendMessageMQSender {
 
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	public void sendMessageToRabbitMq(String message) throws JsonMappingException, JsonProcessingException {
 		try {
 			rabbitTemplate.convertAndSend("SendMessageExchange", "SendMessage", message);
-			System.out.println("訊息已成功發送到 RabbitMQ: " + message);
+			System.out.println("訊息已成功發送到 RabbitMQ: " + objectMapper.readValue(message,MessageDto.class).getMessage());
 		} catch (Exception e) {
 			// 處理訊息發送異常
 			System.err.println("訊息發送失敗: " + e.getMessage());
