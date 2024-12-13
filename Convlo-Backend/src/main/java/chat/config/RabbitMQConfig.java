@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class RabbitMQConfig {
-	/**------------------------------------direct模式-----------------------------------------------------------------------------**/
+/**------------------------------------direct模式-----------------------------------------------------------------------------**/
 	@Bean
 	public DirectExchange SendOfflineUsersExchange() {
 		return new DirectExchange("SendOfflineUsersExchange");

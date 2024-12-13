@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import chat.config.SpringConfigurator;
+import chat.model.dto.ChatDto;
 import chat.service.ChatService;
 import chat.util.JwtUtil;
 import jakarta.websocket.OnClose;

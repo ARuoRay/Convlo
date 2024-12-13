@@ -24,7 +24,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/home/chat/{roomId}", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/home/{roomId}", configurator = SpringConfigurator.class)
 @Component
 public class WebSocketServer {
 
@@ -36,7 +36,7 @@ public class WebSocketServer {
 
 	// 用來統一管理所有連接的 session
 	private static final ConcurrentHashMap<String, ConcurrentHashMap<String, Session>> roomSessions = new ConcurrentHashMap<>();
-	private static final Set<String> OnlineUsers = new HashSet<>();
+	private static final Set<String> OnlineUsers =new HashSet<>();
 	private Session session;
 
 	@OnOpen

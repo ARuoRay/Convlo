@@ -90,6 +90,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void addProfileImage(String filePath,String username) {
+		User userImage=userRepository.findByUsername(username).get();
+		userImage.setVactorPath(filePath);
+		userRepository.save(userImage);
+	}
+
+	@Override
+	public String getProfileImage(String username) {
+		User userImage=userRepository.findByUsername(username).get();
+		return	userImage.getVactorPath();
+		
+	}
+
+	@Override
 	public Boolean updatePassword(String username,Password password) {
 		User user= userRepository.findByUsername(username).orElseThrow(()->new RuntimeException("此會員不存在，修改失敗"));
 		String salt=user.getSalt();

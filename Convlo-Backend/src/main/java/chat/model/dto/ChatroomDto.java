@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatroomDto {
-	
 	private long chatId;
 	private String chatname;
 	private LocalDateTime createAt;

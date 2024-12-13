@@ -1,5 +1,6 @@
 package chat.service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,12 @@ public interface UserService {
 
 	// 修改個人資料
 	Profile updateProfile(Profile profile);
+	
+	//新增個人頭像
+	void addProfileImage(String filePath,String username);
+	
+	//拿取個人圖片
+	String getProfileImage(String username);
 	
 	//修改密碼
 	Boolean updatePassword(String username,Password password);

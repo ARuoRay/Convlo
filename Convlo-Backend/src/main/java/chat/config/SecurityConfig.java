@@ -26,7 +26,7 @@ public class SecurityConfig extends SecurityConfigurerAdapter {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // 啟用自訂義的cors
 				.authorizeHttpRequests(authz -> authz// 設定請求授權規則
-						.requestMatchers("/Register", "/Login","/home/**").permitAll() // 註冊和登錄不需要認證
+						.requestMatchers("/Register", "/Login").permitAll() // 註冊和登錄不需要認證
 						.requestMatchers(request -> "websocket".equalsIgnoreCase(request.getHeader("Upgrade")))
 						.permitAll()// 只允許帶有 Upgrade: websocket 的請求
 						.anyRequest().authenticated()) // 其他請求需要認證器

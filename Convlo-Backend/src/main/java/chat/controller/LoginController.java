@@ -20,24 +20,24 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@PostMapping
 	public ResponseEntity<ApiResponse<?>> checkPassword(@RequestBody Register register) {
 		System.out.println(register.toString());
-		if(userService.checkPassword(register).isPresent()) {
-			String token =JwtUtil.generateToken(register.getUsername());
+		if (userService.checkPassword(register).isPresent()) {
+			String token = JwtUtil.generateToken(register.getUsername());
 			return ResponseEntity.ok(ApiResponse.success("登入成功", token));
 		}
-		 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-	                .body(ApiResponse.error(HttpStatus.NOT_FOUND.value(),"用戶名或密碼錯誤"));
-		
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+				.body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "用戶名或密碼錯誤"));
+
 	}
-	
+
 	// 處理異常狀況
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ApiResponse<Void>> handleTodoRuntimeException(RuntimeException e) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 				.body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), e.getMessage()));
 	}
-	
+
 }
