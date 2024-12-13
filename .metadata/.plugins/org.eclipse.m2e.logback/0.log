@@ -529,3 +529,55 @@
 2024-12-12 16:43:08,528 [Worker-114: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2024-12-12 16:43:08,531 [Worker-114: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2024-12-12 16:43:08,532 [Worker-114: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:44:18,484 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2024-12-13 10:44:59,800 [Worker-1: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:44:59,809 [Worker-1: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:44:59,812 [Worker-1: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:45:02,937 [Worker-9: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:02,946 [Worker-9: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:02,948 [Worker-9: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:45:09,595 [Worker-26: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:09,599 [Worker-26: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:09,601 [Worker-26: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:45:30,711 [Worker-28: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:30,715 [Worker-28: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:30,717 [Worker-28: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:45:43,765 [Worker-1: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:43,769 [Worker-1: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:43,770 [Worker-1: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:45:51,777 [Worker-16: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:51,783 [Worker-16: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:45:51,785 [Worker-16: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:56:07,483 [Worker-22: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:56:07,490 [Worker-22: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:56:07,492 [Worker-22: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:57:19,022 [Worker-35: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:57:19,028 [Worker-35: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:57:19,032 [Worker-35: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:57:23,799 [Worker-25: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:57:23,802 [Worker-25: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:57:23,804 [Worker-25: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 10:58:21,007 [Worker-25: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:58:21,011 [Worker-25: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 10:58:21,013 [Worker-25: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:01:38,032 [Worker-38: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:01:38,036 [Worker-38: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:01:38,039 [Worker-38: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:08:42,396 [Worker-44: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:08:42,400 [Worker-44: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:08:42,402 [Worker-44: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:09:43,371 [Worker-45: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:09:43,375 [Worker-45: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:09:43,376 [Worker-45: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:09:56,974 [Worker-35: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:09:56,977 [Worker-35: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:09:56,979 [Worker-35: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:10:12,015 [Worker-43: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:10:12,019 [Worker-43: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:10:12,020 [Worker-43: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:11:59,558 [Worker-44: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:11:59,562 [Worker-44: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:11:59,564 [Worker-44: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources
+2024-12-13 11:23:27,866 [Worker-48: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:23:27,869 [Worker-48: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-12-13 11:23:27,870 [Worker-48: 建置工作區] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\NTPU\Desktop\Convlo\Convlo-Backend\src\test\resources

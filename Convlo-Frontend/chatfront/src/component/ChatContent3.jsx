@@ -29,59 +29,59 @@ function ChatContent1({ chatname, chatId }) {
     window.location.href = "/login"; // 跳轉到登錄頁
   }
 
-  // useEffect(() => { //拿取個人資料 和會員相關的聊天室
-  //   const getProfile = async () => {
-  //     try {
-  //       const Profile = await getProfileTodo();
-  //       setSendUser(Profile);
-  //     } catch (error) {
-  //       console.log("取得資料失敗:" + error);
-  //     }
-  //   }
-
-  //   const getChatProfile = async () => {
-  //     try {
-  //       const ChatProfile = await getChatTodo(chatId);
-  //       setReceiveChat(ChatProfile)
-  //     } catch (error) {
-  //       console.log("取得資料失敗:" + error);
-  //     }
-  //   }
-
-  //   const getChatHisotory = async () => { //用http搜尋歷史紀錄
-  //     try {
-  //       const ChatHisotory = await getAllTodos(chatId);// 取得聊天記錄
-  //       //console.log(ChatHisotory);
-  //       setMessages(ChatHisotory);
-  //     } catch (error) {
-  //       console.error("取得聊天紀錄失敗:" + error);
-  //     }
-  //   }
-
-  //   getChatHisotory();
-  //   getProfile();
-  //   getChatProfile();
-  // }, [])
-
-  // 初始化用戶資料、聊天室資料和歷史訊息
-  useEffect(() => {
-    const fetchData = async () => {
+  useEffect(() => { //拿取個人資料 和會員相關的聊天室
+    const getProfile = async () => {
       try {
-        const profile = await getProfileTodo();
-        setSendUser(profile);
-
-        const chatProfile = await getChatTodo(chatId);
-        setReceiveChat(chatProfile);
-
-        const chatHistory = await getAllTodos(chatId);
-        setMessages(chatHistory);
+        const Profile = await getProfileTodo();
+        setSendUser(Profile);
       } catch (error) {
-        console.error("資料獲取失敗:", error);
+        console.log("取得資料失敗:" + error);
       }
-    };
+    }
 
-    fetchData();
-  }, [chatId]);
+    const getChatProfile = async () => {
+      try {
+        const ChatProfile = await getChatTodo(chatId);
+        setReceiveChat(ChatProfile)
+      } catch (error) {
+        console.log("取得資料失敗:" + error);
+      }
+    }
+
+    const getChatHisotory = async () => { //用http搜尋歷史紀錄
+      try {
+        const ChatHisotory = await getAllTodos(chatId);// 取得聊天記錄
+        //console.log(ChatHisotory);
+        setMessages(ChatHisotory);
+      } catch (error) {
+        console.error("取得聊天紀錄失敗:" + error);
+      }
+    }
+
+    getChatHisotory();
+    getProfile();
+    getChatProfile();
+  }, [])
+
+  //初始化用戶資料、聊天室資料和歷史訊息
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const profile = await getProfileTodo();
+  //       setSendUser(profile);
+
+  //       const chatProfile = await getChatTodo(chatId);
+  //       setReceiveChat(chatProfile);
+
+  //       const chatHistory = await getAllTodos(chatId);
+  //       setMessages(chatHistory);
+  //     } catch (error) {
+  //       console.error("資料獲取失敗:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [chatId]);
 
 
 
@@ -115,8 +115,14 @@ function ChatContent1({ chatname, chatId }) {
 
     setSocket(socket);
 
+    
+
+
+
     return () => {
-      socket.close();
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.close();
+      }
     };
   }, [jwtToken, chatId]);
 
@@ -136,6 +142,7 @@ function ChatContent1({ chatname, chatId }) {
         message: messageInput.trim(),
       };
 
+      console.log(messageDto);
       socket.send(JSON.stringify(messageDto));
       setMessageInput("");
     } else {
