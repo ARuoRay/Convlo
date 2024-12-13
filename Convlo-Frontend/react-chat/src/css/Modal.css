@@ -1,0 +1,24 @@
+/* 遮罩層樣式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色 */
+    z-index: 1000; /* 確保在最上層 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* 模態框內容樣式 */
+  .modal-content {
+    background-color: #fff; /* 白色背景 */
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1010; /* 比遮罩層更高 */
+  }

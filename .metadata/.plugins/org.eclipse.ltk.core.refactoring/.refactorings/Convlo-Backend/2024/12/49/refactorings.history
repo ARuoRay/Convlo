@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from 專案 &apos;Convlo-Backend&apos;&#x0D;&#x0A;- 原始物件：&apos;Convlo-Backend&apos;&#x0D;&#x0A;- 原始元素：&apos;Convlo-Backend/src/main/java/request&apos;" description="刪除元素" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;request" elements="1" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1733300335418" subPackages="false" version="1.0"/>
+</session>
