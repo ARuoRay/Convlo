@@ -55,7 +55,7 @@ function Login() {
 
   return (
     
-      <div className="bg-gray-300 p-10 rounded-lg shadow-lg w-80 max-w-sm flex-shrink-0 relative right-20">
+      <div className="bg-gray-300 p-10 rounded-lg shadow-lg w-80 max-w-sm flex-shrink-0 relative justify-end items-center">
       {/* 登入標題 */}
         <h2 className="text-2xl font-bold mb-6 text-center">登入</h2>
         {/* 錯誤訊息顯示 */}

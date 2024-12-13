@@ -5,12 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,10 +32,10 @@ public class ImageController {
         }
     }
 
-	@PutMapping("/ImageUpload")
+	@PostMapping("/ImageUpload")
 	public ResponseEntity<ApiResponse<?>> uploadImage(@RequestParam("File") MultipartFile file) {
 		String fileName = file.getOriginalFilename();
-		
+
 		try {
 			Path folderPath = Paths.get(BASE_DIR);
 			Path filePath = folderPath.resolve(fileName);

@@ -47,5 +47,5 @@ public class RabbitMQbroker {
 			System.err.println("訊息發送失敗: " + e.getMessage());
 			throw new RuntimeException("Failed to send message to RabbitMQ", e);
 		}
-	}	
+	}
 }

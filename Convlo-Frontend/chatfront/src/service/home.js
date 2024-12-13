@@ -8,10 +8,10 @@
  * ------------------------------------------------------------
  * */
 const BASE_URL = 'http://localhost:8089/home';
-const token = localStorage.getItem('jwtToken');
 
 // 獲取所有待辦事項
 export const fetchTodos = async() => {
+    const token = localStorage.getItem('jwtToken');
     const response = await fetch(BASE_URL,{
         headers: {
         'Authorization': `Bearer ${token}`  // 在標頭中加上 JWT
@@ -26,10 +26,10 @@ export const fetchTodos = async() => {
 
 // 獲取待辦事項
 export const getTodo = async() => {
+    const token = localStorage.getItem('jwtToken');
     const response = await fetch(BASE_URL, {
         method: 'GET',
         headers: {
-            'Content-type': 'application/json',
             'Authorization': `Bearer ${token}`,
         },
     });
@@ -42,6 +42,7 @@ export const getTodo = async() => {
 
 // 資料送後台待辦事項
 export const postTodo = async(todo) => {
+    const token = localStorage.getItem('jwtToken');
     const response = await fetch(BASE_URL, {
         method: 'POST',
         headers: {
@@ -59,6 +60,7 @@ export const postTodo = async(todo) => {
 
 // 更新待辦事項
 export const putTodo = async(updateTodo) => {
+    const token = localStorage.getItem('jwtToken');
     const response = await fetch(BASE_URL, {
         method: 'PUT',
         headers: {
@@ -76,6 +78,7 @@ export const putTodo = async(updateTodo) => {
 
 // 刪除待辦事項
 export const deleteTodo = async(id) => {
+    const token = localStorage.getItem('jwtToken');
     const response = await fetch(`${BASE_URL}/${id}`, {
         method: 'DELETE',
         headers: {

@@ -22,11 +22,11 @@ public class RegisterController {
 
 	@Autowired
 	private UserService userService;
-
-	// 獲取所有會員
+	
+	//獲取所有會員
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<Register>>> findAllUser() {
-		List<Register> registers = userService.findAllUser();
+	public ResponseEntity<ApiResponse<List<Register>>> findAllUser(){
+		List<Register> registers=userService.findAllUser();
 		return ResponseEntity.ok(ApiResponse.success("查詢成功", registers));
 	}
 
@@ -34,7 +34,7 @@ public class RegisterController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<Register>> createUser(@RequestBody Register register) {
 		System.out.println(register.toString());
-		Register addRegister = userService.addUser(register);
+		Register addRegister=userService.addUser(register);
 		return ResponseEntity.ok(ApiResponse.success("新增成功", addRegister));
 	}
 

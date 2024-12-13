@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  // æ
 import Login from './chat/Login';
 import Home from './chat/Home';
 import Register from './chat/Register';
+import ChatContent1 from './component/ChatContent1';
 import Profile from './chat/Profile';
-import Password from './chat/Password';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/home/profile" element={<Profile />} />
-        <Route path="/home/profile/updatePassword" element={<Password />} />
+        <Route path="/ChatContent1" element={<ChatContent1 />} />
       </Routes>
     </Router>
   );

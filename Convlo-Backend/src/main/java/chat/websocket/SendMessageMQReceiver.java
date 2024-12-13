@@ -33,7 +33,7 @@ public class SendMessageMQReceiver {
 
 			// 實際的 WebSocket 發送邏輯
 			Long roomId=messageDto.getReceiveChat().getChatId();
-			System.out.println("訊息已成功收到房間"+roomId+"的 RabbitMQ: " + messageDto.getMessage());
+			System.out.println("訊息已成功收到房間"+roomId+"的 RabbitMQ: " + message);
 			webSocketServer.SendMessage( message);
 //			webSocketServer2.SendMessage(roomId.toString(), message);
 		} catch (Exception e) {
