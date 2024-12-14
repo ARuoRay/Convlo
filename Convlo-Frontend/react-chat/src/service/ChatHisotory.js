@@ -7,8 +7,7 @@
  * DELETE "http://localhost:8080/todolist/{id}" 刪除待辦事項
  * ------------------------------------------------------------
  * */
-const BASE_URL = 'http://localhost:8089/chat';
-
+const BASE_URL = 'http://localhost:8089/home/chat';
 // 獲取聊天紀錄
 export const getAllTodos = async(roomId) => {
     const token = localStorage.getItem('jwtToken');

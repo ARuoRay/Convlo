@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { createChat } from "../service/ChatList";
 import "../css/modal.css";
+import { useAuth } from "../component/AuthToken";
 
 function AddChat({ isOpen, onClose, onChatCreated }) {
   if (!isOpen) {
     return null; // 如果模態框關閉，則不渲染內容
   }
-
+  const {fetchWithAuth } = useAuth();
   const [chatname, setChatname] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -17,7 +18,8 @@ function AddChat({ isOpen, onClose, onChatCreated }) {
     setSuccessMessage("");
 
     try {
-      const newChat = await createChat({ chatname });
+      // const newChat = await createChat({ chatname });
+      const newChat = await fetchWithAuth('http://localhost:8089/home/chat','POST',{ chatname });
       setSuccessMessage("聊天室創建成功！");
       setTimeout(() => {
         setSuccessMessage("");

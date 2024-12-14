@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { fetchTodos, postTodo, putTodo, deleteTodo } from '../service/Registertodo';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../component/AuthToken";
 
 
 function Register() {
@@ -19,11 +20,13 @@ function Register() {
     const [successMessage, setSuccessMessage] = useState("");
     const [AllUsers,setAllUsers]=useState([]);
     const navigate = useNavigate();
+    const{fetchWithAuth}=useAuth();
 
     //獲取所有會員資料
     useEffect(()=>{
         console.log('抓取資料成功');
-        fetchTodos()
+        // fetchTodos()
+        fetchWithAuth('http://localhost:8089/Register','GET')
         .then(data=>setAllUsers(data))
         .catch((error) => console.error('error:', error));
     },[])

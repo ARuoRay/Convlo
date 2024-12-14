@@ -10,8 +10,10 @@ import {
   MessageSquare,
   Users
 } from 'lucide-react';
+import { useWebsocket } from '../component/AuthWebsocket';
 
 const Navbar = ({ username, onLogout }) => {
+  const{disconnectWebSocket}=useWebsocket();
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState(3); // 示例通知數量
   const navigate = useNavigate(); // 導航函式
@@ -20,6 +22,7 @@ const Navbar = ({ username, onLogout }) => {
   const handleLogout = () => {
     // 刪除 localStorage 中的 JWT token
     localStorage.removeItem('jwtToken');
+    disconnectWebSocket();
     // 導航回登入頁面
     navigate('/login');
   };

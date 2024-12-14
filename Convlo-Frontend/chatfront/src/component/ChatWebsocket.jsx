@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getAllTodos, getProfileTodo, getChatTodo } from "../service/ChatHistory";
+import { useAuth } from "./AuthToken";
 
 function ChatContent1({ chatname, chatId }) {
+  const {token,fetchWithAuth } = useAuth();
   const [messages, setMessages] = useState([]); // 訊息列表
   const [messageInput, setMessageInput] = useState(""); // 輸入框中的訊息
   const [socket, setSocket] = useState(null); // WebSocket 實例
@@ -23,57 +25,59 @@ function ChatContent1({ chatname, chatId }) {
 
 
 
-  const jwtToken = localStorage.getItem("jwtToken");
+  // const jwtToken = localStorage.getItem("jwtToken");
 
-  if (!jwtToken) {
+  if (!token) {
     window.location.href = "/login"; // 跳轉到登錄頁
   }
 
-  // useEffect(() => { //拿取個人資料 和會員相關的聊天室
-  //   const getProfile = async () => {
-  //     try {
-  //       const Profile = await getProfileTodo();
-  //       setSendUser(Profile);
-  //     } catch (error) {
-  //       console.log("取得資料失敗:" + error);
-  //     }
-  //   }
+  useEffect(() => { //拿取個人資料 和會員相關的聊天室
+    const getProfile = async () => {
+      try {
+        // const Profile = await getProfileTodo();
+       // const Profile =await fetchWithAuth('http://localhost:8089/home/chat','GET');
+      } catch (error) {
+        console.log("取得資料失敗:" + error);
+      }
+    }
 
-  //   const getChatProfile = async () => {
-  //     try {
-  //       const ChatProfile = await getChatTodo(chatId);
-  //       setReceiveChat(ChatProfile)
-  //     } catch (error) {
-  //       console.log("取得資料失敗:" + error);
-  //     }
-  //   }
+    const getChatProfile = async () => {
+      try {
+        // const ChatProfile = await getChatTodo(chatId);
+       // const ChatProfile =await fetchWithAuth(`http://localhost:8089/home/chat/${chatId}/profile`,'GET');
+      } catch (error) {
+        console.log("取得資料失敗:" + error);
+      }
+    }
 
-  //   const getChatHisotory = async () => { //用http搜尋歷史紀錄
-  //     try {
-  //       const ChatHisotory = await getAllTodos(chatId);// 取得聊天記錄
-  //       //console.log(ChatHisotory);
-  //       setMessages(ChatHisotory);
-  //     } catch (error) {
-  //       console.error("取得聊天紀錄失敗:" + error);
-  //     }
-  //   }
+    const getChatHisotory = async () => { //用http搜尋歷史紀錄
+      try {
+        // const ChatHisotory = await getAllTodos(chatId);// 取得聊天記錄
+        
+        //const ChatHisotory =await fetchWithAuth(`http://localhost:8089/home/chat/${chatId}`,'GET');
+        //console.log(ChatHisotory);
+      } catch (error) {
+        console.error("取得聊天紀錄失敗:" + error);
+      }
+    }
 
-  //   getChatHisotory();
-  //   getProfile();
-  //   getChatProfile();
-  // }, [])
+    getChatHisotory();
+    getProfile();
+    getChatProfile();
+  }, [])
 
   // 初始化用戶資料、聊天室資料和歷史訊息
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const profile = await getProfileTodo();
+        const profile = await fetchWithAuth('http://localhost:8089/home/chat','GET');       
         setSendUser(profile);
 
-        const chatProfile = await getChatTodo(chatId);
+        const chatProfile = await fetchWithAuth(`http://localhost:8089/home/chat/${chatId}/profile`,'GET');
         setReceiveChat(chatProfile);
+        
 
-        const chatHistory = await getAllTodos(chatId);
+        const chatHistory = await fetchWithAuth(`http://localhost:8089/home/chat/${chatId}`,'GET');
         setMessages(chatHistory);
       } catch (error) {
         console.error("資料獲取失敗:", error);
@@ -87,9 +91,9 @@ function ChatContent1({ chatname, chatId }) {
 
   useEffect(() => {
     const socket = new WebSocket(
-      `ws://localhost:8089/home/chat/${chatId}?token=${jwtToken}`
+      `ws://localhost:8089/home/chat/${chatId}?token=${token}`
     );
-   // console.log(socket);
+    // console.log(socket);
 
     socket.onopen = () => {
       console.log("WebSocket 連接已成功建立！");
@@ -116,9 +120,11 @@ function ChatContent1({ chatname, chatId }) {
     setSocket(socket);
 
     return () => {
-      socket.close();
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.close();
+      }
     };
-  }, [jwtToken, chatId]);
+  }, [token, chatId]);
 
   const sendMessage = () => {
     if (!sendUser) {

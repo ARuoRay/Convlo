@@ -98,9 +98,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String getProfileImage(String username) {
-		User userImage=userRepository.findByUsername(username).get();
-		return	userImage.getVactorPath();
-		
+		return userRepository.findByUsername(username).get().getVactorPath();	
 	}
 
 	@Override

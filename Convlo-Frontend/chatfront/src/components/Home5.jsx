@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ChatList from "../component/ChatList2";
-import ChatContent from "../component/ChatContent3";
+import ChatContent from "../component/ChatWebsocket";
 import Profile from "./Profile";
 import AddChat from "../component/AddChat";
 import { fetchAllChats,fetchMessages } from "../service/ChatList";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../component/AuthToken";
 
 function Home() {
-  const [token, setToken] = useState(localStorage.getItem("jwtToken"));
+  const { token, fetchWithAuth } = useAuth();
   const navigate = useNavigate();
   const [user, setUser] = useState();
   const [chats, setChats] = useState([]);
@@ -33,14 +34,10 @@ function Home() {
 
   // 獲取聊天室列表
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
     const loadChats = async () => {
       try {
-        const fetchedChats = await fetchAllChats();
+        //const fetchedChats = await fetchAllChats();
+        const fetchedChats = await fetchWithAuth(`http://localhost:8089/home/chat/user`,'GET');
         setChats(fetchedChats);
       } catch (error) {
         console.error("Failed to load chats:", error);
@@ -54,7 +51,8 @@ function Home() {
     console.log("Selected Chat ID:", chatId); // 確認 chatId
     setSelectedChat(chatId);
     try {
-      const fetchedMessages = await fetchMessages(chatId);
+      //const fetchedMessages = await fetchMessages(chatId);
+      const fetchedMessages = await fetchWithAuth(`http://localhost:8089/home/chat/${chatId}`,'GET');
       console.log("我的fetch拿到"+chatId)
       setMessages(fetchedMessages); // 更新消息
     } catch (error) {

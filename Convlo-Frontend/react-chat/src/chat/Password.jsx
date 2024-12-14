@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from "react-router-dom";
 import { fetchTodos, getTodo, postTodo, putTodo, deleteTodo } from '../service/updatePassword';
+import { useAuth } from "../component/AuthToken";
 
 function Password() {
     const navigate=useNavigate();
+    const{fetchWithAuth}=useAuth();
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [password, setPassword] = useState({
@@ -32,7 +34,8 @@ function Password() {
 
         try {
 
-            await putTodo(password);
+            // await putTodo(password);
+            await fetchWithAuth('http://localhost:8089/home/profile/updatePassword','PUT',password);
             setSuccessMessage("密碼修改成功！");
             setTimeout(()=>{
                 setSuccessMessage(""); //清除成功消息

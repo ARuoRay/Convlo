@@ -15,27 +15,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class SendMessageMQReceiver {
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
-	@Autowired
-    private WebSocketServer webSocketServer;
-	
-//	@Autowired
-//	private WebSocketServer2 webSocketServer2;
 
-	@RabbitListener(queues = "ChatIdQueue")
+	@Autowired
+	private WebSocketServer webSocketServer;
+
+	@RabbitListener(queues = "ChatQueue")
 	public void receiveMessage(String message) {
 		try {
 			MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
 			// System.out.println(messageDto.toString());
 
 			// 實際的 WebSocket 發送邏輯
-			Long roomId=messageDto.getReceiveChat().getChatId();
-			System.out.println("訊息已成功收到房間"+roomId+"的 RabbitMQ: " + messageDto.getMessage());
-			webSocketServer.SendMessage( message);
-//			webSocketServer2.SendMessage(roomId.toString(), message);
+			Long roomId = messageDto.getReceiveChat().getChatId();
+			// System.out.println("訊息已成功收到房間"+roomId+"的 RabbitMQ: " +
+			// messageDto.getMessage());
+			System.out.println(
+					"消費者成功接收到房間 " + roomId + " 的通道訊息 : " + objectMapper.readValue(message, MessageDto.class).getMessage());
+			webSocketServer.SendMessage(message);
 		} catch (Exception e) {
 			System.err.println("接收訊息處理失敗: " + e.getMessage());
 			e.printStackTrace();

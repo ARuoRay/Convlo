@@ -1,9 +1,0 @@
-package chat.service;
-
-import chat.model.dto.MessageDto;
-
-public interface MessageService {
-
-	//新增訊息
-	void addMessage(MessageDto messageDto);
-}

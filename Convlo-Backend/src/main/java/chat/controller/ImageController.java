@@ -1,5 +1,6 @@
 package chat.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,7 +49,7 @@ public class ImageController {
 		try {
 			Path folderPath = Paths.get(Profile_Image);
 			Path filePath = folderPath.resolve(fileName);
-			System.out.println(filePath.toString());
+			//System.out.println(filePath.toString());
 			userService.addProfileImage(filePath.toString(),username);
 			 Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 			 return ResponseEntity.ok(ApiResponse.success("檔案已成功上傳至：" + filePath.toAbsolutePath(), null));
@@ -59,21 +60,10 @@ public class ImageController {
 	}
 	
 	@GetMapping("/User/ImageUpload")
-	public ResponseEntity<ApiResponse<?>> getImage(@AuthenticationPrincipal String username) {
-		String fileName = file.getOriginalFilename();
-		String fileName = userService.getProfileImage(username);
-		
-		
-		try {
-			Path folderPath = Paths.get(Profile_Image);
-			Path filePath = folderPath.resolve(fileName);
-			//System.out.println(filePath.toString());
-
-			 Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-			 return ResponseEntity.ok(ApiResponse.success("檔案已成功上傳至：" + filePath.toAbsolutePath(), null));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "檔案上傳失敗：" + e.getMessage()));
-		}
+	public ResponseEntity<ApiResponse<byte[]>> getImage(@AuthenticationPrincipal String username) throws IOException {
+		 File file=new File(userService.getProfileImage(username));
+		// 讀取文件為 byte[]
+		byte[] fileContent = Files.readAllBytes(file.toPath());
+		return ResponseEntity.ok(ApiResponse.success("檔案查詢成功", fileContent));
 	}
 }

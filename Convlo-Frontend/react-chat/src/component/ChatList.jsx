@@ -2,9 +2,26 @@ import React from "react"
 import AddChat from "./AddChat";
 import { useState } from "react";
 
-function ChatList({ chats }) {
+function ChatList() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [chats, setChats] = useState([
+    {
+      id: 5,
+      creator: {
+        username: "abc"
+      },
+      chatname: "123",
+    },
+    {
+      id: 5,
+      creator: {
+        username: "abc"
+      },
+      chatname: "123",
+    },
+  ]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true); // 打開模態框

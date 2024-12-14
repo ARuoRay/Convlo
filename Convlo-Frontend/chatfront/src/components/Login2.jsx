@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { fetchTodos, postTodo, putTodo, deleteTodo } from '../service/Logintodo';
+import { useAuth } from '../component/AuthToken';
 
 // 定義 Login 組件，用於顯示登入表單
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+  const{setToken,fetchWithAuth}=useAuth();
   const navigate = useNavigate();
 
-  const jwt = localStorage.getItem("jwtToken");
   // 處理表單提交
   const handleSubmit = async (e) => {
       e.preventDefault();
@@ -30,7 +30,9 @@ function Login() {
       //將資料丟後端去做比對
       try {
           const response = await postTodo(user);
+          // const response = await fetchWithAuth('http://localhost:8089/Login','POST', user);
           //console.log(response);
+          setToken(response); // 儲存 Token
           localStorage.setItem('jwtToken', response);
           navigate('/home');
 

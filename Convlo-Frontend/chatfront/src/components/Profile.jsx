@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { fetchTodos, getTodo, postTodo, putTodo, deleteTodo } from '../service/home'
+import { useAuth } from "../component/AuthToken";
 //import "../css/modal.css";
 
 function Profile({ isOpen, onClose, UserData, setUserData }) {
@@ -9,7 +10,7 @@ function Profile({ isOpen, onClose, UserData, setUserData }) {
     }
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
-
+    const{fetchWithAuth}=useAuth();
     // 處理表單變更
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -35,7 +36,8 @@ function Profile({ isOpen, onClose, UserData, setUserData }) {
                 profileContent: UserData.profileContent,
             };
 
-            putTodo(updateUser);
+            // putTodo(updateUser);
+            const profile=await fetchWithAuth('http://localhost:8089/home/profile','PUT',UserData);
             setSuccessMessage("資料已成功更新！");
             setTimeout(() => {
                 setSuccessMessage(""); // 清除成功消息

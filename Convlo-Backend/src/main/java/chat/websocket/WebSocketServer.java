@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import chat.config.SpringConfigurator;
 import chat.service.ChatService;
@@ -24,19 +25,22 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/home/{roomId}", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/home/chat/{roomId}", configurator = SpringConfigurator.class)
 @Component
 public class WebSocketServer {
 
 	@Autowired
 	private SendMessageMQSender rabbitMqSender;
-	
+
 	@Autowired
 	private ChatService chatService;
 
+	@Autowired
+	private ObjectMapper objectMapper;
+
 	// 用來統一管理所有連接的 session
 	private static final ConcurrentHashMap<String, ConcurrentHashMap<String, Session>> roomSessions = new ConcurrentHashMap<>();
-	private static final Set<String> OnlineUsers =new HashSet<>();
+	private static final Set<String> OnlineUsers = new HashSet<>();
 	private Session session;
 
 	@OnOpen
@@ -66,7 +70,7 @@ public class WebSocketServer {
 			return sessions;
 		});
 		OnlineUsers.add(username);
-		
+
 		System.out.println(username + "加入到房間" + roomId);
 		System.out.println("目前聊天室 " + roomId + " 中有 " + roomSessions.get(roomId).size() + " 人");
 	}
@@ -74,18 +78,16 @@ public class WebSocketServer {
 	@OnMessage
 	public void onMessage(String message, Session session) throws JsonMappingException, JsonProcessingException {
 		// 使用 RabbitMqSender 發送消息
-		String roomId=(String) session.getUserProperties().get("roomId");
-		Set<String> AllUsers=chatService.findAllUserByChat(roomId).stream()
-						  .map(user->user.getUsername())
-						  .collect(Collectors.toSet());
-		
+		String roomId = (String) session.getUserProperties().get("roomId");
+		Set<String> AllUsers = chatService.findAllUserByChat(roomId).stream().map(user -> user.getUsername())
+				.collect(Collectors.toSet());
+
 		Set<String> offlineUsers = new HashSet<>(AllUsers);
-		offlineUsers.remove(OnlineUsers);
-		if(!offlineUsers.isEmpty()) {
-			rabbitMqSender.sendMessageToOfflineUserToRabbitMq(message);
-			rabbitMqSender.sendOfflineUserToRabbitMq(offlineUsers);
+		offlineUsers.removeIf(OnlineUsers::contains);
+		if (!offlineUsers.isEmpty()) {
+			rabbitMqSender.sendOfflineUserToRabbitMq(objectMapper.writeValueAsString(offlineUsers),roomId);
 		}
-		rabbitMqSender.sendMessageToOnlineUserToRabbitMq(message);
+		rabbitMqSender.sendMessageToRabbitMq(message);
 	}
 
 	@OnClose
