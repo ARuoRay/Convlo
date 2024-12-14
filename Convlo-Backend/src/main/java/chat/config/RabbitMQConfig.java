@@ -8,71 +8,46 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class RabbitMQConfig {
 	/**
 	 * ------------------------------------direct模式-----------------------------------------------------------------------------
 	 **/
+
 	@Bean
-	public DirectExchange SendOfflineUsersExchange() {
-		return new DirectExchange("SendOfflineUsersExchange");
+	public DirectExchange TypeExchange() {
+		return new DirectExchange("TypeExchange");
 	}
 
 	@Bean
 	public Queue SendOfflineUsersQueue() {
-		return new Queue("SendOfflineUsersQueue", true);
+		return new Queue("SendOfflineUsersQueue", true); //不在房間會員名單通道
 	}
-
-	@Bean
-	public Binding SendOfflineUsersBinding() {
-		return BindingBuilder.bind(SendOfflineUsersQueue()).to(SendOfflineUsersExchange()).with("OfflineUserList");
-	}
-
-	/**
-	 * ------------------------------------Fanout模式-----------------------------------------------------------------------------
-	 **/
-	@Bean
-	public FanoutExchange SendMessageExchange() {
-		return new FanoutExchange("SendMessageExchange");
-	}
-
+	
 	@Bean
 	public Queue SendMessageToOnlineUsersQueue() {
-		return new Queue("SendMessageToOnlineUsersQueue", true); // 在線會員通道
+		return new Queue("SendMessageToOnlineUsersQueue", true); // 在房間會員通道
 	}
 
 	@Bean
 	public Queue SendMessageToOfflineUsersQueue() {
-		return new Queue("SendMessageToOfflineUsersQueue", true); // 不在線會員通道
+		return new Queue("SendMessageToOfflineUsersQueue", true); // 不在房間會員通道
+	}
+
+	@Bean
+	public Binding SendOfflineUsersBinding() {
+		return BindingBuilder.bind(SendOfflineUsersQueue()).to(TypeExchange()).with("OfflineUserList");
 	}
 
 	@Bean
 	public Binding SendMessageToOnlineUsersBinding() {
-		return BindingBuilder.bind(SendMessageToOnlineUsersQueue()).to(SendMessageExchange());
+		return BindingBuilder.bind(SendMessageToOnlineUsersQueue()).to(TypeExchange()).with("SendMessageToOnlineUsers");
 	}
 
 	@Bean
 	public Binding SendMessageToOfflineUsersBinding() {
-		return BindingBuilder.bind(SendMessageToOfflineUsersQueue()).to(SendMessageExchange());
+		return BindingBuilder.bind(SendMessageToOfflineUsersQueue()).to(TypeExchange()).with("SendMessageToOfflineUsers");
 	}
 
-	/**
-	 * -------------------------------------Topic模式--------------------------------------------------------------------------
-	 **/
-	@Bean
-	public TopicExchange ChatTypeExchange() {
-		return new TopicExchange("ChatTypeExchange");
-	}
-
-	@Bean
-	public Queue ChatQueue() {
-		return new Queue("ChatQueue", true);// 片段傳送給誰隊列
-	}
-
-	@Bean
-	public Binding chatBinding() {
-		return BindingBuilder.bind(ChatQueue()).to(ChatTypeExchange()).with("ChatId.#");
-	}
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { getAllTodos, getProfileTodo, getChatTodo } from "../service/ChatHistory";
 import { useAuth } from "./AuthToken";
 
-function ChatContent1({ chatname, chatId }) {
+function ChatWebsocket({ chatname, chatId }) {
   const {token,fetchWithAuth } = useAuth();
   const [messages, setMessages] = useState([]); // 訊息列表
   const [messageInput, setMessageInput] = useState(""); // 輸入框中的訊息
@@ -203,4 +203,4 @@ function ChatContent1({ chatname, chatId }) {
 
 }
 
-export default ChatContent1;
+export default ChatWebsocket;

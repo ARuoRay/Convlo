@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatList from "../component/ChatList2";
-import ChatContent from "../component/ChatWebsocket";
+import ChatWebsocket from "../component/ChatWebsocket";
 import Profile from "./Profile";
 import AddChat from "../component/AddChat";
 import { fetchAllChats,fetchMessages } from "../service/ChatList";
@@ -103,7 +103,7 @@ function Home() {
       <div className="flex-1 bg-white shadow-lg p-6 mx-4 rounded-lg ">
       <div className="bg-gray-100 shadow-md p-6 rounded-lg h-full">
           {selectedChat ? (
-            <ChatContent chatId={selectedChat} chatname={chats.find(chat => chat.chatId === selectedChat)?.chatname || "聊天室"} messages={messages} />
+            <ChatWebsocket chatId={selectedChat} chatname={chats.find(chat => chat.chatId === selectedChat)?.chatname || "聊天室"} messages={messages} />
         ) : (
             <p className="text-center text-gray-500">請選擇一個聊天室開始聊天</p>
           )}

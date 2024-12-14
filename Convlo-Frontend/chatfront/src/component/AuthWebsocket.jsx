@@ -16,6 +16,24 @@ export const WebSocketProvider = ({ children}) => {
   const [offlineMessages, setOfflineMessages] = useState([]);
   const {token}=useAuth();
   const socketRef = useRef(null); // 用 useRef 來持有 WebSocket 連接
+  const [message,setMessage ]= useState({
+    sendUser: {
+      username:"",
+      nickname:"",
+      gender:""  
+    },
+    receiveChat: {
+      chatId:0,
+      chatname:"",
+      createAt:[],
+      creator:{
+        username:"",
+        nickname:"",
+        gender:""
+      }
+    },
+    message: ""
+  });
 
   
 
@@ -25,16 +43,13 @@ export const WebSocketProvider = ({ children}) => {
 
     socket.onopen = () => {
       console.log("WebSocket 連接已成功建立！");
-      // // 當 WebSocket 連接成功，發送離線消息（如果有）
-      // offlineMessages.forEach((msg) => {
-      //     socket.send(JSON.stringify({ message: msg }));
-      // });
-      // setOfflineMessages([]); // 清空已發送的離線消息
     };
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, message]);
+      // setMessage(JSON.parse(event.data))
+      console.log(message);
+       setMessages((prevMessages) => [...prevMessages, messageDto.message]);
     };
 
     socket.onerror = (error) => {
