@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Profile getUser(String username) {
 		// 查詢個人資料
-		System.out.println(username);
+//		System.out.println(username);
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("此會員不存在"));
 		Profile userDto = modelMapper.map(user, Profile.class);
 		return userDto;

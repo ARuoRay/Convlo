@@ -4,12 +4,13 @@ import { fetchTodos, postTodo, putTodo, deleteTodo } from '../service/Logintodo'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Login.css'
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../component/AuthToken";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
+    const {setToken,fetchWithAuth } = useAuth();
     const navigate = useNavigate();
 
 
@@ -32,8 +33,9 @@ function Login() {
         //console.log(user);
         //將資料丟後端去做比對
         try {
-            const response = await postTodo(user);
-            console.log(response);
+            // const response = await postTodo(user);
+            const response = await fetchWithAuth('http://localhost:8089/Login','POST', user);
+            setToken(response); // 儲存 Token
             localStorage.setItem('jwtToken', response);
             navigate('/home');
 
@@ -44,7 +46,6 @@ function Login() {
             setErrorMessage(error.message);
             console.log('網路錯誤:', error.message);
         }
-
 
 
 

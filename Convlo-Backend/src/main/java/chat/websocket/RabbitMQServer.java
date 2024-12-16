@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import CustomJson.CustomJson;
+import CustomJson.OfflineUser;
 import chat.model.dto.MessageDto;
 
 @Service
@@ -20,26 +23,16 @@ public class RabbitMQServer {
 	private ObjectMapper objectMapper;
 
 	// 傳送給在房間人員的訊息
-	public void sendMessageToOnlineRabbitMq(String message) throws JsonMappingException, JsonProcessingException {
+	public void sendMessageToOnlineRabbitMq(String customMessage, String roomId, String username)
+			throws JsonMappingException, JsonProcessingException {
 		try {
-			MessageDto messageDto=objectMapper.readValue(message, MessageDto.class);
-			System.out.println("會員 "+messageDto.getSendUser().getUsername()+" 的生產者訊息 : " + messageDto.getMessage());
+			CustomJson<Object> typeMessage = objectMapper.readValue(customMessage,
+					new TypeReference<CustomJson<Object>>() {
+					});
+			MessageDto messageDto = objectMapper.convertValue(typeMessage.getData(), MessageDto.class);
+			System.out.println("會員 " + username + " 從房間 " + roomId + " 的生產者訊息 : " + messageDto.getMessage());
 			System.out.println("準備發送到處理在房間會員訊息的通道...");
-			rabbitTemplate.convertAndSend("TypeExchange", "SendMessageToOnlineUsers", message);
-		} catch (Exception e) {
-			// 處理訊息發送異常
-			System.err.println("訊息發送失敗: " + e.getMessage());
-			throw new RuntimeException("Failed to send message to RabbitMQ", e);
-		}
-	}
-	
-	// 傳送給不在房間人員的訊息
-	public void sendMessageToOfflineRabbitMq(String message) throws JsonMappingException, JsonProcessingException {
-		try {
-			MessageDto messageDto=objectMapper.readValue(message, MessageDto.class);
-			System.out.println("會員 "+messageDto.getSendUser().getUsername()+" 的生產者訊息 : " + messageDto.getMessage());
-			System.out.println("準備發送到處理不在房間會員訊息的通道...");
-			rabbitTemplate.convertAndSend("TypeExchange", "SendMessageToOfflineUsers", message);
+			rabbitTemplate.convertAndSend("TypeExchange", "SendMessageToOnlineUsers", customMessage);
 		} catch (Exception e) {
 			// 處理訊息發送異常
 			System.err.println("訊息發送失敗: " + e.getMessage());
@@ -47,18 +40,22 @@ public class RabbitMQServer {
 		}
 	}
 
-	// 傳送不在房間人員的名單
-	public void sendOfflineUserToRabbitMq(String OfflineUsers, String roomId)
-			throws JsonMappingException, JsonProcessingException {
+	// 傳送給不在房間人員的訊息
+	public void sendMessageToOfflineRabbitMq(String NotifiedMessage, String roomId, String username) {
 		try {
-			Thread.sleep(3000);
-			System.out.println("生產者的房間 " + roomId + " 不在線名單訊息 : " + OfflineUsers);
-			System.out.println("準備發送到處理不在房間名單的通道...");
-			rabbitTemplate.convertAndSend("TypeExchange", "OfflineUserList", OfflineUsers);
+			CustomJson<Object> typeMessage = objectMapper.readValue(NotifiedMessage,
+					new TypeReference<CustomJson<Object>>() {
+					});
+			OfflineUser offlineUser = objectMapper.convertValue(typeMessage.getData(), OfflineUser.class);
+			System.out.println("會員 " + username + " 從房間 " + roomId + " 的生產者不在房間名單和訊息 : " + offlineUser.getOfflineUser()
+					+ ":" + offlineUser.getMessageDto().getMessage());
+			System.out.println("準備發送到處理不在房間會員訊息的通道...");
+			rabbitTemplate.convertAndSend("TypeExchange", "SendMessageToOfflineUsers", NotifiedMessage);
 		} catch (Exception e) {
 			// 處理訊息發送異常
 			System.err.println("訊息發送失敗: " + e.getMessage());
 			throw new RuntimeException("Failed to send message to RabbitMQ", e);
 		}
 	}
+
 }

@@ -1,30 +1,36 @@
 
 import React, { useState, useEffect } from "react";
-import { fetchTodos, getTodo, postTodo, putTodo, deleteTodo } from '../service/Profile'
+import {  getTodo, putImage, putTodo } from '../service/Profile'
 import { useNavigate } from "react-router-dom";
 import "../css/modal.css";
+import ImageUpload from "../component/ImageUpload";
+import { useAuth } from "../component/AuthToken";
 
 function Profile() {
     const navigate = useNavigate();
 
     const [UserData, setUserData] = useState({
-        username: "",
+        image:"",
+        username: "",   
         nickName: "",
         email: "",
         gender: "",
         profileContent: "",
     });
 
+    const [selectedImage, setSelectedImage] = useState(null); // 用於儲存選中的圖片檔案
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const{fetchWithAuth}=useAuth();
 
     useEffect(() => {
         // 創建一個異步函數來處理 getTodo
         const fetchData = async () => {
-            
+
             try {
-                const data = await getTodo();
-                setUserData(data); // 更新狀態
+                // const profile = await getTodo();
+                const profile = await fetchWithAuth('http://localhost:8089/home/profile','GET');
+                setUserData(profile); // 更新狀態
             } catch (err) {
                 setErrorMessage(err.message); // 處理錯誤
             }
@@ -33,6 +39,10 @@ function Profile() {
         fetchData(); // 調用異步函數
     }, [])
 
+    // 處理圖片上傳成功回呼
+    const handleImageUpload = (file) => {
+        setSelectedImage(file);
+    };
 
     // 處理表單變更
     const handleChange = (e) => {
@@ -44,6 +54,8 @@ function Profile() {
 
     // 處理表單提交
     const handleSubmit = async (e) => {
+        const formData = new FormData();
+        formData.append("File", selectedImage);
         e.preventDefault();
         console.log(UserData);
 
@@ -51,11 +63,14 @@ function Profile() {
 
         try {
 
-
-            await putTodo(UserData);
+           // await putImage(formData);
+           // await putTodo(UserData);
+           //const Image=await fetchWithAuth('http://localhost:8089/file/User/ImageUpload','PUT',formData);
+           const profile=await fetchWithAuth('http://localhost:8089/home/profile','PUT',UserData);
             setSuccessMessage("資料已成功更新！");
             setTimeout(() => {
                 setSuccessMessage(""); // 清除成功消息
+                console.log(selectedImage);
                 navigate('/home');
             }, 2000);
         } catch (error) {
@@ -71,6 +86,7 @@ function Profile() {
                 {errorMessage && <div id="error-message" style={{ color: "red" }}>{errorMessage}</div>}
                 {successMessage && <div id="success-message" style={{ color: "green" }}>{successMessage}</div>}
                 <form onSubmit={handleSubmit}>
+                    <ImageUpload onUpload={handleImageUpload } />
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">會員帳號</label>
                         <input type="text" className="form-control bg-light" id="username" name="username" value={UserData.username} disabled />
@@ -120,8 +136,9 @@ function Profile() {
                             rows="5" // 設定行數
                             style={{ resize: "none" }} />
                     </div>
+                    <button type="button" className="btn btn-danger me-2" onClick={() => navigate("/home/profile/updatePassword")}>修改密碼</button>
                     <button type="button" className="btn btn-danger me-2" onClick={() => navigate("/home")}>返回</button>
-                    <button type="submit" className="btn btn-primary">提交</button>
+                    <button type="submit" className="btn btn-primary">送出</button>
                 </form>
             </div>
         </div>

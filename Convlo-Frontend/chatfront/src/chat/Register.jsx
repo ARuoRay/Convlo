@@ -4,10 +4,11 @@ import '../css/Register.css';
 import { useState } from "react";
 import { fetchTodos, postTodo, putTodo, deleteTodo } from '../service/Registertodo';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../component/AuthToken";
 
 
 function Register() {
-
+    const{fetchWithAuth}=useAuth();
     const [RegisterData, setRegisterData] = useState({
         username: "",
         password: "",
@@ -23,7 +24,8 @@ function Register() {
     //獲取所有會員資料
     useEffect(()=>{
         console.log('抓取資料成功');
-        fetchTodos()
+        // fetchTodos()
+        fetchWithAuth('http://localhost:8089/Register','GET')
         .then(data=>setAllUsers(data))
         .catch((error) => console.error('error:', error));
     },[])
@@ -40,7 +42,7 @@ function Register() {
     // 處理表單提交
     const handleSubmit =  async(e) => {
         e.preventDefault();
-        //console.log(AllUsers);
+        // console.log(AllUsers);
         // 簡單的表單驗證
         if (!RegisterData.username || !RegisterData.password || !RegisterData.email || !RegisterData.gender) {
             setErrorMessage("所有欄位都必須填寫");
@@ -55,11 +57,11 @@ function Register() {
         // 假設成功註冊
         setSuccessMessage("註冊成功！");
         setErrorMessage(""); // 清除錯誤訊息
-        navigate('/Login'); // 跳轉回登入頁面
 
         console.log(RegisterData);
         try {
-            await postTodo(RegisterData);
+            // await postTodo(RegisterData);
+            fetchWithAuth('http://localhost:8089/Register','POST',RegisterData);
         } catch (error) {
             console.log('網路錯誤:', error.message);
         }

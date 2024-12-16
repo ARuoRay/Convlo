@@ -1,11 +1,9 @@
 #root {
-  max-width: 1200px;
-  margin: auto;
-  padding: 1rem;
-  
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
-
-
 
 .logo {
   height: 6em;
@@ -42,39 +40,3 @@
 .read-the-docs {
   color: #888;
 }
-
-
-.login-container {
-  margin-top: 20px;
-}
-
-.App {
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* 填滿視窗高度 */
-}
-
-body, html {
-  margin: 0px;
-  padding: 10px;
-  height: 100%;
-  overflow: auto;
-  font-family: Arial, sans-serif;
-  background-color: #aac6e7; /* 背景色：淺藍色 */
-}
-
-
-.main-content {
-  flex: 1;
-  width: 100%;
-  display: flex;
-}
-
-.login-area {
-  background-color: #d3d3d3; /* 登入框背景顏色 */
-  padding: 40px;
-  border-radius: 10px;
-  width: 300px; /* 調整寬度，使其與設計圖相符 */
-}
-
-

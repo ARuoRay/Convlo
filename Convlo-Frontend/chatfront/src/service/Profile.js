@@ -46,7 +46,7 @@ export const putTodo = async (updateTodo) => {
 
 export const putImage = async (FormData) => {
     const token = localStorage.getItem('jwtToken');
-    const response = await fetch('http://localhost:8089/file/ImageUpload', {
+    const response = await fetch('http://localhost:8089/file/User/ImageUpload', {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -59,3 +59,20 @@ export const putImage = async (FormData) => {
     }
     throw new Error(result.message);
 }
+
+export const getImage= async(FormData) =>{
+    const token=localStorage.getItem('jwtToken');
+    const response=await fetch('http://localhost:8089/file/User/ImageUpload',{
+        method:'GET',
+        headers:{
+            'Authorization': `Bearer ${token}`,
+        },
+        body: FormData,
+    });
+    const result=await response.json();
+    if(result.status===200){
+        return result.data; // 返回資料
+    }
+    throw new Error(result.message);
+}
+

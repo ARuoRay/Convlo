@@ -19,11 +19,6 @@ public class RabbitMQConfig {
 	public DirectExchange TypeExchange() {
 		return new DirectExchange("TypeExchange");
 	}
-
-	@Bean
-	public Queue SendOfflineUsersQueue() {
-		return new Queue("SendOfflineUsersQueue", true); //不在房間會員名單通道
-	}
 	
 	@Bean
 	public Queue SendMessageToOnlineUsersQueue() {
@@ -33,11 +28,6 @@ public class RabbitMQConfig {
 	@Bean
 	public Queue SendMessageToOfflineUsersQueue() {
 		return new Queue("SendMessageToOfflineUsersQueue", true); // 不在房間會員通道
-	}
-
-	@Bean
-	public Binding SendOfflineUsersBinding() {
-		return BindingBuilder.bind(SendOfflineUsersQueue()).to(TypeExchange()).with("OfflineUserList");
 	}
 
 	@Bean

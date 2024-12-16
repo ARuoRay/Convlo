@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.Channel;
 
 import chat.config.SpringConfigurator;
 import chat.model.dto.MessageDto;
@@ -28,7 +30,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/home/chat/{roomId}", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/home/chat", configurator = SpringConfigurator.class)
 @Component
 public class CHatWebSocketServer {
 
@@ -50,8 +52,9 @@ public class CHatWebSocketServer {
 	private Session session;
 
 	@OnOpen
-	public synchronized void onOpen(Session session, @PathParam("roomId") String roomId) throws IOException {
+	public void onOpen(Session session) throws IOException {
 		String token = session.getRequestParameterMap().get("token").get(0);
+		String roomId=session.getRequestParameterMap().get("roomId").get(0);
 		String username = JwtUtil.getUsernameFromToken(token);
 		this.session = session;
 
@@ -102,7 +105,7 @@ public class CHatWebSocketServer {
 			}
 
 			sessions.remove(username);
-			System.out.println("連接關閉: " + username);
+			System.out.println(username+" 離開房間 "+roomId);
 			System.out.println("目前聊天室 " + roomId + " 中剩餘 " + sessions.size() + " 人");
 			return sessions.isEmpty() ? null : sessions;// 如果該房間沒有成員，則移除該房間
 		});
@@ -125,12 +128,13 @@ public class CHatWebSocketServer {
 
 	// 發送消息到特定房間
 	@RabbitListener(queues = "SendMessageToOnlineUsersQueue")
-	public void SendMessage(String message) throws JsonMappingException, JsonProcessingException {
-		String roomId = session.getPathParameters().get("roomId");
+	public void SendMessage(String message) throws IOException {
+		String roomId = (String)session.getUserProperties().get("roomId");
 		MessageDto messageDto = objectMapper.readValue(message, MessageDto.class);
 //		messageService.addMessage(messageDto); //將訊息保存在資料庫
 		System.out.println(
 				"會員 " + messageDto.getSendUser().getUsername() + " 的消費者成功接收到在房間人員的通道訊息 : " + messageDto.getMessage());
+		System.out.println(messageDto);
 		if (roomSessions.containsKey(roomId)) {
 			for (Session s : roomSessions.get(roomId).values()) {
 				try {
